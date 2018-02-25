@@ -1,0 +1,46 @@
+class Solution {
+public:
+    // DP solution with O(N^2) Time and O(N) space 
+    int lengthOfLIS(vector<int>& nums) {
+        const int size = nums.size();
+        if (size == 0) { return 0; } 
+        vector<int> dp(size, 1);
+        int res = 1;
+        for (int i = 1; i < size; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j]+1);
+                }
+            }
+            res = max (res, dp[i]);
+        }
+        return res;
+    }
+};
+class Solution {
+public:
+    // using binary search solution with O(NlogN) Time and O(N) space 
+   int lengthOfLIS(vector<int>& nums) {
+    vector<int> ladder(1);
+    if(nums.empty()) return 0;
+    ladder[0]=nums[0];
+    for(int i=1; i<nums.size(); ++i){
+        int m=int(ladder.size());
+        bool foundless=false;
+        for(int j=m-1;j>=0;--j){
+            if(nums[i] > ladder[j]){
+                if(j+1==ladder.size()){
+                    ladder.push_back(nums[i]);
+                }
+                else{
+                    ladder[j+1]=min(ladder[j+1],nums[i]);
+                }
+                foundless=true;
+                break;
+            }
+        }
+        if(!foundless) ladder[0]=min(ladder[0],nums[i]);
+    }
+    return ladder.size();
+}
+};
